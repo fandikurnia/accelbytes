@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: accelbytes 
+      MYSQL_DATABASE: accelbytes
+      MYSQL_USER: accelbytes
+      MYSQL_PASSWORD: accelbytes
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITARY=1
+    #ports:
+    #  - 8081:80
+    links:
+      - mysql:db
+    volumes:
+      - ./sessions:/sessions
+  
+  apacheproxy: 
+    build: apache_proxy/ 
+    links:
+        - phpmyadmin 
+    ports: 
+        - 8081:80
